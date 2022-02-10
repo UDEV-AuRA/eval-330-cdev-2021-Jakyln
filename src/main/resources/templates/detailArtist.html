@@ -43,26 +43,21 @@
 				<form id="saveForm" action="/artists" method="post">
 					<div class="col-lg-12">
 						<div class="form-group">
-							<label for="name" class="form-control-label">Nom</label>
-							<input type="text" id="name" class="form-control" th:value="${artist.name}">
+							<div th:replace="fragments/inputs :: inputText('Nom', 'nom', ${artist.name})"> </div>
 
-<!--							****************-->
-<!--							<div th:fragment="inputText(label,id,value)">-->
-<!--								<label class="form-control-label" th:for="${id}" th:text="${label}"></label>-->
-<!--								<input type="text" th:value="${value}" class="form-control" th:name="${id}" th:id="${id}">-->
-<!--							</div>-->
-
-<!--							<input type="text" th:value="${#strings.toUpperCase(employe.nom)}" class="form-control" name="nom" id="nom">-->
-
-<!--							***************-->
 
 							<label class="form-control-label">Albums</label>
 							<div class="row">
 								<div class="col-lg-10">
 									<div class="list-group">
-										<li class="list-group-item">&nbsp;Let There Be Rock</li>
-										<li class="list-group-item">&nbsp;For Those About To Rock We Salute You</li>
+										<li class="list-group-item" th:each="album : ${artist.albums}"  th:text="${album.title}"> </li>
 									</div>
+
+									<!-- On peut faire aussi comme ca mais le layout buggera un peu
+									<div class="list-group" th:each="album : ${artist.albums}">
+										<li class="list-group-item"  th:text="${album.title}"> </li>
+									</div>-->
+
 								</div>
 								<div class="col-lg-2 text-center">
 									<div class="list-group text-center">

@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -45,39 +46,61 @@ public class ArtistController {
 
     /*@RequestMapping(
             method = RequestMethod.GET,
-            value = "/employes",
+                value = "/artists",
             produces = MediaType.APPLICATION_JSON_VALUE,
-            params = "matricule"
+            params = "name"
     )
-    public ModelAndView searchByMatricule(
+    public ModelAndView searchByName(
             @RequestParam String name
     ){
-        ModelAndView model = new ModelAndView("detail");
-        model.addObject("employe", artistService.findByNameLikeIgnoreCase(name));
+        ModelAndView model = new ModelAndView("list");
+        model.addObject("artists", artistService.findByNameLikeIgnoreCase(name));
         return model;
     }*/
 
 
+
+    // recherche par nom en cours
     @RequestMapping(
             method = RequestMethod.GET,
-            value = "",
+            value = "/artists",
             produces = MediaType.APPLICATION_JSON_VALUE,
             params = "name"
 
     )
-    public Page<Artist> findArtistByName(
+    public ModelAndView findArtistByName(
             @RequestParam(defaultValue = "0") Integer page,
             @RequestParam(defaultValue = "10") Integer size,
             @RequestParam(defaultValue = "name") String sortProperty,
             @RequestParam(defaultValue = "ASC") String sortDirection,
             @RequestParam String name
     ){
-        Page artists =  artistService.findByNameLikeIgnoreCase(name, page,size,sortDirection,sortProperty);
-        if(artists != null){
-            return artists;
-        }
+        ModelAndView model = new ModelAndView("listeArtists");
+        Page artists =  artistService.findByNameLikeIgnoreCase(name, page,size,sortProperty,sortDirection);
 
-        throw new EntityNotFoundException("L'artiste de nom " + name + " n'a pas été trouvé !");
+        model.addObject("start",page * size + 1 );
+        model.addObject("end",page * size + artists.getNumberOfElements() );
+        model.addObject("artists",artists );
+        return model;
+    }
+
+    // Liste des artistes : ex 3
+    @RequestMapping(
+            method = RequestMethod.GET,
+            value = "/artists"
+    )
+    public ModelAndView listArtists(
+            @RequestParam Integer page,
+            @RequestParam Integer size,
+            @RequestParam String sortProperty,
+            @RequestParam String sortDirection
+    ){
+        Page<Artist> artists = artistService.findAllArtists(page,size,sortProperty,sortDirection);
+        ModelAndView model = new ModelAndView("listeArtists");
+        model.addObject("start",page * size + 1 );
+        model.addObject("end",page * size + artists.getNumberOfElements() );
+        model.addObject("artists",artists ); // derniere page aura pas forcement 10 elements
+        return model;
     }
 
 

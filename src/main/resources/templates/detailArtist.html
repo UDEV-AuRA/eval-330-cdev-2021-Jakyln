@@ -43,7 +43,7 @@
 				<form id="saveForm" action="/artists" method="post">
 					<div class="col-lg-12">
 						<div class="form-group">
-							<div th:replace="fragments/inputs :: inputText('Nom', 'nom', ${artist.name})"> </div>
+							<div th:replace="fragments/inputs :: inputText('Name', 'name', ${artist.name})"> </div>
 
 
 							<label class="form-control-label">Albums</label>
@@ -81,7 +81,8 @@
 			</div>
 
 			<div class="row">
-				<a disabled="" class="btn btn-primary">Enregistrer</a>
+<!--				<a class="btn btn-primary">Enregistrer</a>-->
+				<input form="saveForm" type="submit" value="Enregistrer">
 				<a class="btn btn-danger">Supprimer</a>
 			</div>
 		</div>

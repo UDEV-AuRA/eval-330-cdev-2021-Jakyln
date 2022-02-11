@@ -12,11 +12,9 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -60,7 +58,8 @@ public class ArtistController {
 
 
 
-    // recherche par nom en cours
+    // recherche par nom
+
     @RequestMapping(
             method = RequestMethod.GET,
             value = "/artists",
@@ -102,6 +101,38 @@ public class ArtistController {
         model.addObject("artists",artists ); // derniere page aura pas forcement 10 elements
         return model;
     }
+
+    @RequestMapping(
+            method = RequestMethod.GET,
+            value = "/artists/new"
+    )
+    public ModelAndView newArtist(){
+        ModelAndView model = new ModelAndView("detailArtist");
+        Artist artist = new Artist();
+        model.addObject("artist", artist);
+        return model;
+
+    }
+
+    @RequestMapping(
+            method = RequestMethod.POST,
+            value = "/artists",
+            consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE
+    )
+    public RedirectView createArtist(Artist artist){
+        if(artist.getId() == null){
+            //Création
+            artist = artistService.creerArtiste(artist);
+        }
+        else {
+            //Modification
+            artist = artistService.updateArtiste(artist.getId(), artist);
+        }
+        //Redirection vers /employes/id
+        return new RedirectView("/artists/" + artist.getId());
+    }
+
+
 
 
 

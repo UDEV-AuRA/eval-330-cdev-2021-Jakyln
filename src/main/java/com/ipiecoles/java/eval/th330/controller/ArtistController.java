@@ -1,6 +1,7 @@
 package com.ipiecoles.java.eval.th330.controller;
 
 import com.ipiecoles.java.eval.th330.model.Artist;
+import com.ipiecoles.java.eval.th330.service.AlbumService;
 import com.ipiecoles.java.eval.th330.service.ArtistService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,6 +24,8 @@ public class ArtistController {
     @Autowired
     private ArtistService artistService;
 
+    @Autowired
+    private AlbumService albumService;
     @RequestMapping(
             method = RequestMethod.GET,
             value = "/"
@@ -134,9 +137,38 @@ public class ArtistController {
         }*/
         //Redirection vers /artists/id
         return new RedirectView("/artists/" + artist.getId());
-
-
     }
+
+    @RequestMapping(
+            method = RequestMethod.GET,
+            value = "/artists/{id}/delete"
+    )
+    public RedirectView deleteArtist(@PathVariable Long id){
+        artistService.deleteArtist(id);
+        return new RedirectView("/artists?page=0&size=10&sortProperty=name&sortDirection=ASC");
+    }
+
+
+    /*
+    @RequestMapping(
+            method = RequestMethod.DELETE,
+            value = "/{id}"
+    )
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Transactional
+    public void deleteArtist(
+            @PathVariable Long id
+    ){
+        Optional<Artist> artist = artistRepository.findById(id);
+        List<Album> albums = albumRepository.findAlbumByArtist(artist.get().getId());
+
+        for (Album album : albums) {
+            System.out.println("album : " +album.getTitle() );
+            albumRepository.deleteAlbumFromArtist(artist.get().getId());
+        }
+        artistRepository.deleteArtistById(id);
+    }
+     */
 
 
 

@@ -106,7 +106,7 @@ public class ArtistController {
             method = RequestMethod.GET,
             value = "/artists/new"
     )
-    public ModelAndView newArtist(){
+    public ModelAndView newArtist(){ // quand on va dans artists/new , ca nous redirige vers un détail d'artise vide. Ensuite le btn enregistrer utilise la fonction createArtist  (POST)
         ModelAndView model = new ModelAndView("detailArtist");
         Artist artist = new Artist();
         model.addObject("artist", artist);
@@ -128,8 +128,14 @@ public class ArtistController {
             //Modification
             artist = artistService.updateArtiste(artist.getId(), artist);
         }
-        //Redirection vers /employes/id
+        /*if(artist.getId() != null){
+            //Création
+            artist = artistService.updateArtiste(artist.getId(), artist);
+        }*/
+        //Redirection vers /artists/id
         return new RedirectView("/artists/" + artist.getId());
+
+
     }
 
 

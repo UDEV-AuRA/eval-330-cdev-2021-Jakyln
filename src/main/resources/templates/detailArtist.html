@@ -49,26 +49,29 @@
 
 							<label class="form-control-label">Albums</label>
 							<div class="row" th:if="${artist.albums}">
-								<div class="col-lg-10">
-									<div class="list-group">
-										<li class="list-group-item" th:each="album : ${artist.albums}"  th:text="${album.title}"> </li>
-									</div>
+								<div th:each="album : ${artist.albums}">
+									<div class="col-lg-10">
+										<div class="list-group">
+											<li class="list-group-item"   th:text="${album.title}"> </li>
+										</div>
 
-									<!-- On peut faire aussi comme ca mais le layout buggera un peu
-									<div class="list-group" th:each="album : ${artist.albums}">
-										<li class="list-group-item"  th:text="${album.title}"> </li>
-									</div>-->
+										<!-- On peut faire aussi comme ca mais le layout buggera un peu
+                                        <div class="list-group" th:each="album : ${artist.albums}">
+                                            <li class="list-group-item"  th:text="${album.title}"> </li>
+                                        </div>-->
 
-								</div>
-								<div class="col-lg-2 text-center" >
-									<div class="list-group text-center"  th:each="album : ${artist.getAlbums()}">
-										<a th:href="|/albums/${album.id}|" class="btn-danger list-group-item list-group-item-action">
-											<span class="glyphicon glyphicon-remove"></span>
-										</a>
-<!--										<button class="btn-danger list-group-item list-group-item-action"><span class="glyphicon glyphicon-remove"></span></button>-->
-<!--										<button class="btn-danger list-group-item list-group-item-action"><span class="glyphicon glyphicon-remove"></span></button>-->
+									</div>
+									<div class="col-lg-2 text-center" >
+										<div class="list-group text-center" >
+											<a th:href="|/albums/${album.id}|" class="btn-danger list-group-item list-group-item-action">
+												<span class="glyphicon glyphicon-remove"></span>
+											</a>
+											<!--										<button class="btn-danger list-group-item list-group-item-action"><span class="glyphicon glyphicon-remove"></span></button>-->
+											<!--										<button class="btn-danger list-group-item list-group-item-action"><span class="glyphicon glyphicon-remove"></span></button>-->
+										</div>
 									</div>
 								</div>
+
 							</div>
 							<div class="row">
 								<div class="col-lg-10">

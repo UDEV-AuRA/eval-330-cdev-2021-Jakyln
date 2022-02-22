@@ -1,5 +1,6 @@
 package com.ipiecoles.java.eval.th330.controller;
 
+import com.ipiecoles.java.eval.th330.model.Album;
 import com.ipiecoles.java.eval.th330.model.Artist;
 import com.ipiecoles.java.eval.th330.service.AlbumService;
 import com.ipiecoles.java.eval.th330.service.ArtistService;
@@ -18,6 +19,9 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @Controller
 public class ArtistController {
@@ -144,6 +148,19 @@ public class ArtistController {
             value = "/artists/{id}/delete"
     )
     public RedirectView deleteArtist(@PathVariable Long id){
+
+        Artist artist = artistService.findById(id);
+        Set<Album> albums = artist.getAlbums();
+
+        for (Album album : albums) {
+            albumService.deleteAlbum(album.getId());
+        }
+
+        /*while(albums.iterator().hasNext()) {
+            albumService.deleteAlbum.
+            System.out.println(albums.iterator().hasNext());
+        }*/
+        albumService.deleteAlbum(id);
         artistService.deleteArtist(id);
         return new RedirectView("/artists?page=0&size=10&sortProperty=name&sortDirection=ASC");
     }

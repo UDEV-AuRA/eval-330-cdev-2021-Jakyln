@@ -63,6 +63,11 @@ public class ArtistService {
     }
 
 
+    public Boolean checkExistsByName(String name){
+        return artistRepository.existsByName(name);
+
+    }
+
 
 
 //    @Query(value = "SELECT * FROM artist a WHERE a.name LIKE :name% ", nativeQuery = true)

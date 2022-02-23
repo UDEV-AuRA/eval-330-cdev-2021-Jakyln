@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
@@ -30,6 +31,7 @@ public class ArtistController {
 
     @Autowired
     private AlbumService albumService;
+
     @RequestMapping(
             method = RequestMethod.GET,
             value = "/"
@@ -45,27 +47,12 @@ public class ArtistController {
     )
     public ModelAndView detailArtist(@PathVariable Long id){
         ModelAndView model = new ModelAndView("detailArtist");
-        model.addObject("artist",artistService.findById(id));
-        return model;
+        if(id != null){
+            model.addObject("artist",artistService.findById(id));
+            return model;
+        }
+        throw new EntityNotFoundException("L'artiste d'identifiant " + id + " n'existe pas !");
     }
-
-    /*@RequestMapping(
-            method = RequestMethod.GET,
-                value = "/artists",
-            produces = MediaType.APPLICATION_JSON_VALUE,
-            params = "name"
-    )
-    public ModelAndView searchByName(
-            @RequestParam String name
-    ){
-        ModelAndView model = new ModelAndView("list");
-        model.addObject("artists", artistService.findByNameLikeIgnoreCase(name));
-        return model;
-    }*/
-
-
-
-    // recherche par nom
 
     @RequestMapping(
             method = RequestMethod.GET,
@@ -118,7 +105,6 @@ public class ArtistController {
         Artist artist = new Artist();
         model.addObject("artist", artist);
         return model;
-
     }
 
     @RequestMapping(
@@ -127,19 +113,29 @@ public class ArtistController {
             consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE
     )
     public RedirectView createArtist(Artist artist){
-        if(artist.getId() == null){
-            //Création
-            artist = artistService.creerArtiste(artist);
+
+        if(artistService.checkExistsByName(artist.getName())){
+            throw new EntityExistsException("Il existe déjà un artiste identique en base");
         }
-        else {
-            //Modification
-            artist = artistService.updateArtiste(artist.getId(), artist);
+
+        if(artist.getName().trim().length()>0){ //vérifie si le user n'a pas mis que des espaces
+            try {
+                if(artist.getId() == null){
+                    //Création
+                    artist = artistService.creerArtiste(artist);
+                }
+                else {
+                    //Modification
+                    artist = artistService.updateArtiste(artist.getId(), artist);
+                }
+            }
+            catch(Exception e){
+                throw new IllegalArgumentException("Problème lors de la sauvegarde de l'artiste");
+            }
         }
-        /*if(artist.getId() != null){
-            //Création
-            artist = artistService.updateArtiste(artist.getId(), artist);
-        }*/
-        //Redirection vers /artists/id
+        else{
+            throw new IllegalArgumentException("Veuillez remplir le champ du nom de l'artiste");
+        }
         return new RedirectView("/artists/" + artist.getId());
     }
 
@@ -156,39 +152,8 @@ public class ArtistController {
             albumService.deleteAlbum(album.getId());
         }
 
-        /*while(albums.iterator().hasNext()) {
-            albumService.deleteAlbum.
-            System.out.println(albums.iterator().hasNext());
-        }*/
         albumService.deleteAlbum(id);
         artistService.deleteArtist(id);
         return new RedirectView("/artists?page=0&size=10&sortProperty=name&sortDirection=ASC");
     }
-
-
-    /*
-    @RequestMapping(
-            method = RequestMethod.DELETE,
-            value = "/{id}"
-    )
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @Transactional
-    public void deleteArtist(
-            @PathVariable Long id
-    ){
-        Optional<Artist> artist = artistRepository.findById(id);
-        List<Album> albums = albumRepository.findAlbumByArtist(artist.get().getId());
-
-        for (Album album : albums) {
-            System.out.println("album : " +album.getTitle() );
-            albumRepository.deleteAlbumFromArtist(artist.get().getId());
-        }
-        artistRepository.deleteArtistById(id);
-    }
-     */
-
-
-
-
-
 }

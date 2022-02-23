@@ -47,53 +47,56 @@
 							<div th:replace="fragments/inputs :: inputText('Name', 'name', ${artist.name})"> </div>
 
 
-							<label class="form-control-label">Albums</label>
-							<div class="row" th:if="${artist.albums}">
-								<div th:each="album : ${artist.albums}">
-									<div class="col-lg-10">
-										<div class="list-group">
-											<li class="list-group-item"   th:text="${album.title}"> </li>
-										</div>
 
-										<!-- On peut faire aussi comme ca mais le layout buggera un peu
-                                        <div class="list-group" th:each="album : ${artist.albums}">
-                                            <li class="list-group-item"  th:text="${album.title}"> </li>
-                                        </div>-->
-
-									</div>
-									<div class="col-lg-2 text-center" >
-										<div class="list-group text-center" >
-											<a th:href="|/albums/${album.id}|" class="btn-danger list-group-item list-group-item-action">
-												<span class="glyphicon glyphicon-remove"></span>
-											</a>
-											<!--										<button class="btn-danger list-group-item list-group-item-action"><span class="glyphicon glyphicon-remove"></span></button>-->
-											<!--										<button class="btn-danger list-group-item list-group-item-action"><span class="glyphicon glyphicon-remove"></span></button>-->
-										</div>
-									</div>
+						</div>
+					</div>
+				</form>
+				<form id="saveAlbumForm" action="/albums" method="post">
+					<label class="form-control-label">Albums</label>
+					<div class="row" th:if="${artist.albums}">
+						<div th:each="album : ${artist.albums}">
+							<div class="col-lg-10">
+								<div class="list-group">
+									<li class="list-group-item"   th:text="${album.title}"> </li>
 								</div>
 
+								<!-- On peut faire aussi comme ca mais le layout buggera un peu
+                                <div class="list-group" th:each="album : ${artist.albums}">
+                                    <li class="list-group-item"  th:text="${album.title}"> </li>
+                                </div>-->
 							</div>
-							<div class="row">
-								<div class="col-lg-10">
-									<input type="text" placeholder="Ajouter un album..." class="form-control  ">
-								</div>
-								<div class="col-lg-2 text-center">
-									<a th:href="|/albums|" class="btn-success list-group-item list-group-item-action">
-										<span class="glyphicon glyphicon-plus"></span>
+							<div class="col-lg-2 text-center" >
+								<div class="list-group text-center" >
+									<a th:href="|/albums/${album.id}|" class="btn-danger list-group-item list-group-item-action">
+										<span class="glyphicon glyphicon-remove"></span>
 									</a>
-
 								</div>
 							</div>
 						</div>
 					</div>
+					<div class="row">
+						<div class="col-lg-10">
+<!--							<input type="text" placeholder="Ajouter un album..." class="form-control  ">-->
+							<input type="hidden" th:value="${artist.id}" name="artistId">
+							<input type="text" placeholder="Ajouter un album..." class="form-control  " name="albumTitle">
+							<button type="text"  placeholder="Ajouter un album..." class="form-control  ">
+								<span class="glyphicon glyphicon-plus"></span>
+							</button>
+						</div>
+						<div class="col-lg-2 text-center">
+<!--																<input class="btn-success list-group-item list-group-item-action" form="saveAlbumForm" type="submit" value="Enregistrer">-->
+<!--																<a th:href="|/albums|" class="btn-success list-group-item list-group-item-action">-->
+<!--																	<span class="glyphicon glyphicon-plus"></span>-->
+<!--																</a>-->
+						</div>
+					</div>
 				</form>
+<!--				<input form="saveAlbumForm" type="submit" value="EnregistrerAl">-->
 			</div>
-
 			<div class="row">
 <!--				<a class="btn btn-primary">Enregistrer</a>-->
 				<input form="saveForm" type="submit" value="Enregistrer">
 				<a th:href="|/artists/${artist.id}/delete|" class="btn btn-danger">Supprimer</a>
-
 			</div>
 		</div>
 	</div>

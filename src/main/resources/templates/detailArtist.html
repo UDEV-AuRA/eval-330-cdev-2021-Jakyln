@@ -19,12 +19,12 @@
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</button>
-					<a href="#" class="navbar-brand">Librairie Audio</a>
+					<a href="/" class="navbar-brand">Librairie Audio</a>
 				</div>
 
 				<div id="bs-example-navbar-collapse-1" class="collapse navbar-collapse">
 					<ul class="nav navbar-nav">
-						<li class="active"><a href="#" class="nav-link ">Liste des artistes</a></li>
+						<li class="active"> <a href="/artists?page=0&amp;size=10&amp;sortProperty=name&amp;sortDirection=ASC" class="nav-link ">Liste des artistes</a> </li>
 					</ul>
 
 					<form role="search" class="navbar-form navbar-right">
@@ -45,57 +45,51 @@
 						<div class="form-group">
 							<input type="hidden" th:value="${artist.id}" name="id">
 							<div th:replace="fragments/inputs :: inputText('Name', 'name', ${artist.name})"> </div>
-
-
-
 						</div>
 					</div>
 				</form>
+
 				<form id="saveAlbumForm" action="/albums" method="post">
-					<label class="form-control-label">Albums</label>
-					<div class="row" th:if="${artist.albums}">
-						<div th:each="album : ${artist.albums}">
-							<div class="col-lg-10">
-								<div class="list-group">
-									<li class="list-group-item"   th:text="${album.title}"> </li>
-								</div>
+					<div class="col-lg-12">
+						<div class="form-group">
+							<label class="form-control-label">Albums</label>
+							<div class="row" th:if="${artist.albums}">
+								<div th:each="album : ${artist.albums}">
+									<div class="col-lg-10">
+										<div class="list-group">
+											<li class="list-group-item"   th:text="${album.title}"> </li>
+										</div>
+									</div>
 
-								<!-- On peut faire aussi comme ca mais le layout buggera un peu
-                                <div class="list-group" th:each="album : ${artist.albums}">
-                                    <li class="list-group-item"  th:text="${album.title}"> </li>
-                                </div>-->
-							</div>
-							<div class="col-lg-2 text-center" >
-								<div class="list-group text-center" >
-									<a th:href="|/albums/${album.id}|" class="btn-danger list-group-item list-group-item-action">
-										<span class="glyphicon glyphicon-remove"></span>
-									</a>
+									<div class="col-lg-2 text-center" >
+										<div class="list-group text-center" >
+											<a th:href="|/albums/${album.id}|" class="btn-danger list-group-item list-group-item-action">
+												<span class="glyphicon glyphicon-remove"></span>
+											</a>
+										</div>
+									</div>
 								</div>
 							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-lg-10">
-<!--							<input type="text" placeholder="Ajouter un album..." class="form-control  ">-->
-							<input type="hidden" th:value="${artist.id}" name="artistId">
-							<input type="text" placeholder="Ajouter un album..." class="form-control  " name="albumTitle">
-							<button type="text"  placeholder="Ajouter un album..." class="form-control  ">
-								<span class="glyphicon glyphicon-plus"></span>
-							</button>
-						</div>
-						<div class="col-lg-2 text-center">
-<!--																<input class="btn-success list-group-item list-group-item-action" form="saveAlbumForm" type="submit" value="Enregistrer">-->
-<!--																<a th:href="|/albums|" class="btn-success list-group-item list-group-item-action">-->
-<!--																	<span class="glyphicon glyphicon-plus"></span>-->
-<!--																</a>-->
+
+							<div class="row">
+								<div class="col-lg-10">
+
+									<input type="hidden" th:value="${artist.id}" name="artistId">
+									<input type="text" placeholder="Ajouter un album..." class="form-control  " name="albumTitle">
+								</div>
+								<div class="col-lg-2 text-center" >
+									<button type="text"  placeholder="Ajouter un album..." class="form-control  ">
+										<span class="glyphicon glyphicon-plus"></span>
+									</button>
+								</div>
+							</div>
 						</div>
 					</div>
 				</form>
-<!--				<input form="saveAlbumForm" type="submit" value="EnregistrerAl">-->
 			</div>
+
 			<div class="row">
-<!--				<a class="btn btn-primary">Enregistrer</a>-->
-				<input form="saveForm" type="submit" value="Enregistrer">
+				<input form="saveForm" type="submit" value="Enregistrer" class="btn btn-primary">
 				<a th:href="|/artists/${artist.id}/delete|" class="btn btn-danger">Supprimer</a>
 			</div>
 		</div>
